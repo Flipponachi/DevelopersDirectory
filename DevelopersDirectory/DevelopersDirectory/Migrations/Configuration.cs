@@ -1,3 +1,5 @@
+using DevelopersDirectory.Models;
+
 namespace DevelopersDirectory.Migrations
 {
     using System;
@@ -14,10 +16,61 @@ namespace DevelopersDirectory.Migrations
 
         protected override void Seed(DevelopersDirectory.DAL.DirectoryContext context)
         {
-            //  This method will be called after migrating to the latest version.
+            var developerCount = context.Developers.Count();
 
-            //  You can use the DbSet<T>.AddOrUpdate() helper extension method 
-            //  to avoid creating duplicate seed data.
+            if (developerCount == 0)
+            {
+                context.Categories.AddOrUpdate(e => e.CategoryId,
+                    new Category
+                    {
+                        CategoryId = 1,
+                        CategoryTitle = "Front-End Developer"
+                    },
+                    new Category
+                    {
+                        CategoryId = 2,
+                        CategoryTitle = "Back-End Developer"
+                    },
+                    new Category
+                    {
+                        CategoryId = 3,
+                        CategoryTitle = "Fullstack Developer"
+                    },
+
+                    new Category
+                    {
+                        CategoryId = 4,
+                        CategoryTitle = "Data Scientist"
+                    });
+
+                context.Developers.AddOrUpdate(e => e.EmailAddress,
+                    new Developer
+                    {
+                        GithubId = "https://github.com/folaraz",
+                        Name = "Olajide Abdulrazzaq Folarin",
+                        CategoryId = 4,
+                        EmailAddress = "folaraz11@gmail.com"
+
+                    },
+                    new Developer
+                    {
+                        GithubId = "https://github.com/SeunMatt",
+                        Name = "Seun Matt",
+                        CategoryId = 3,
+                        TwitterHandle = "https://twitter.com/seunmatt2"
+
+                    },
+                    new Developer
+                    {
+                        GithubId = "https://github.com/flipponachi",
+                        Name = "Dayo Ojo Jnr",
+                        CategoryId = 3,
+                        EmailAddress = "dayoojojnr@hotmail.com",
+                        TwitterHandle = "https://twitter.com/flipponachi"
+
+                    });
+                context.SaveChanges();
+            }
         }
     }
 }
