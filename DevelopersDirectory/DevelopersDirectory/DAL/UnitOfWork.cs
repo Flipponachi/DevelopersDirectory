@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 using DevelopersDirectory.Interfaces;
 
 namespace DevelopersDirectory.DAL
@@ -15,6 +16,10 @@ namespace DevelopersDirectory.DAL
             _context = new DirectoryContext();
         }
 
+        public async Task Save()
+        {
+            await _context.SaveChangesAsync();
+        }
         public void Dispose()
         {
             _context?.Dispose();

@@ -9,6 +9,11 @@ namespace DevelopersDirectory.DAL
 {
     public class DirectoryContext : DbContext
     {
+        public DirectoryContext() : base("DefaultConnection")
+        {
+            
+        }
+            
         public DbSet<Developer> Developers { get; set; }
         public DbSet<Category> Categories { get; set; }
     }

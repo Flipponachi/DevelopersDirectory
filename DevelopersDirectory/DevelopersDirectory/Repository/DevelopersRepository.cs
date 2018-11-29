@@ -2,6 +2,7 @@
 using System.Data.Entity;
 using System.Linq;
 using System.Threading.Tasks;
+using AutoMapper;
 using DevelopersDirectory.BindingModels;
 using DevelopersDirectory.DAL;
 using DevelopersDirectory.Interfaces;
@@ -37,7 +38,9 @@ namespace DevelopersDirectory.Repository
 
         public async Task CreateDeveloperEntry(DeveloperDirectoryBindingModel model)
         {
-            throw new System.NotImplementedException();
+            var directory = Mapper.Map<Developer>(model);
+            _context.Developers.Add(directory);
+            var saved = await _context.SaveChangesAsync();
         }
 
         public async Task DeleteDeveloper(int? id)
