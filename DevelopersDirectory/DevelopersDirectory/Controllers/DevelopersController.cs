@@ -54,7 +54,26 @@ namespace DevelopersDirectory.Controllers
                 return BadRequest($"Developer entry not created. {e.Message}");
             }
         }
+
         //Get Specific Developer
+        [HttpGet, Route("singleentry")]
+        public async Task<IHttpActionResult> SingleEntry(int? id)
+        {
+            if (id == null)
+                return BadRequest("Supply Id of Developer Entry");
+
+            try
+            {
+
+                var developerEntry = await _unitOfWork.DevelopersRepository.SingleDeveloper(id);
+                return Ok(developerEntry);
+            }
+            catch (Exception e)
+            {
+                ErrorSignal.FromCurrentContext().Raise(e);
+                return BadRequest($"Developer Record not found");
+            }
+        }
         //Update Specific Developer
         //Delete Specific Developer
 
