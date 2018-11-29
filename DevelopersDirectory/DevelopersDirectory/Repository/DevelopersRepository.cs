@@ -62,5 +62,12 @@ namespace DevelopersDirectory.Repository
             _context.Developers.Remove(directoryEntry);
             await _context.SaveChangesAsync();
         }
+
+        //Get all developers with their categories
+        public async Task<IQueryable<Category>> DeveloperCategories()
+        {
+            var categories = await _context.Categories.Include(e => e.Developers).ToListAsync();
+            return categories.AsQueryable();
+        }
     }
 }

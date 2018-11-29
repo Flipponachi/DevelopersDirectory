@@ -114,7 +114,14 @@ namespace DevelopersDirectory.Controllers
 
         }
 
+        //Get categories as well as developers in the category
+        [HttpGet, ActionName("category")]
+        public async Task<IHttpActionResult> Category()
+        {
+            var category = await _unitOfWork.DevelopersRepository.DeveloperCategories();
+            return Ok(category);
 
+        }
 
     }
 }

@@ -14,5 +14,6 @@ namespace DevelopersDirectory.Interfaces
 
         Task EditDeveloperEntry(Developer model);
         Task DeleteDeveloper(int? id);
+        Task<IQueryable<Category>> DeveloperCategories();
     }
 }
