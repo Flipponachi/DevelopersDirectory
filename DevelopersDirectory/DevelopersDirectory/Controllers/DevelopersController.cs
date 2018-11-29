@@ -78,14 +78,14 @@ namespace DevelopersDirectory.Controllers
 
         //Update Specific Developer
         [HttpPut, ActionName("developerdirectory")]
-        public async Task<IHttpActionResult> UpdateDeveloper(int? id, [FromBody]DeveloperDirectoryBindingModel model)
+        public async Task<IHttpActionResult> UpdateDeveloper([FromBody]Developer model)
         {
-            if (id == null)
-                return BadRequest("Supply Id of developer to be edited");
-
+            if (model.DeveloperId.Equals(null))
+                return BadRequest("Supply Id Of developer");
+            
             try
             {
-                await _unitOfWork.DevelopersRepository.EditDeveloperEntry(id, model);
+                await _unitOfWork.DevelopersRepository.EditDeveloperEntry(model);
                 return Ok("Record Updated successfully");
             }
             catch (Exception e)

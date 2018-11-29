@@ -12,7 +12,7 @@ namespace DevelopersDirectory.Interfaces
 
         Task CreateDeveloperEntry(DeveloperDirectoryBindingModel model);
 
-        Task EditDeveloperEntry(int? id, DeveloperDirectoryBindingModel model);
+        Task EditDeveloperEntry(Developer model);
         Task DeleteDeveloper(int? id);
     }
 }
