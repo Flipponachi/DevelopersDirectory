@@ -12,7 +12,11 @@ namespace DevelopersDirectory.MappingProfile
     {
         public static void RegisterMappings()
         {
-            Mapper.Initialize(cfg => { cfg.CreateMap<Developer, DeveloperDirectoryBindingModel>().ReverseMap(); });
+            Mapper.Initialize(cfg =>
+            {
+                cfg.CreateMap<Developer, DeveloperDirectoryBindingModel>().ReverseMap();
+               
+            });
         }
     }
 }

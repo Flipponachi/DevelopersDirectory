@@ -43,9 +43,23 @@ namespace DevelopersDirectory.Repository
             var saved = await _context.SaveChangesAsync();
         }
 
+        public async Task EditDeveloperEntry(int? id, DeveloperDirectoryBindingModel model)
+        {
+            var member = await SingleDeveloper(id);
+
+            if(member == null)
+                throw new Exception("Developer entry not found");
+            
+            _context.Entry(member).State = EntityState.Modified;
+            await _context.SaveChangesAsync();
+            
+        }
+
         public async Task DeleteDeveloper(int? id)
         {
-            throw new System.NotImplementedException();
+            var directoryEntry = await SingleDeveloper(id);
+            _context.Developers.Remove(directoryEntry);
+            await _context.SaveChangesAsync();
         }
     }
 }

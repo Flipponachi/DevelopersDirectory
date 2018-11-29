@@ -74,8 +74,45 @@ namespace DevelopersDirectory.Controllers
                 return BadRequest($"Developer Record not found");
             }
         }
+
+
         //Update Specific Developer
+        [HttpPut, ActionName("developerdirectory")]
+        public async Task<IHttpActionResult> UpdateDeveloper(int? id, [FromBody]DeveloperDirectoryBindingModel model)
+        {
+            if (id == null)
+                return BadRequest("Supply Id of developer to be edited");
+
+            try
+            {
+                await _unitOfWork.DevelopersRepository.EditDeveloperEntry(id, model);
+                return Ok("Record Updated successfully");
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
+
+        }
+
         //Delete Specific Developer
+       [HttpDelete, ActionName("developerdirectory")]
+        public async Task<IHttpActionResult> DeleteDeveloper(int? id)
+        {
+            if (id == null)
+                return BadRequest("Supply Id of developer deleted");
+
+            try
+            {
+                await _unitOfWork.DevelopersRepository.DeleteDeveloper(id);
+                return Ok("Record Deleted Successfully");
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
+
+        }
 
 
 

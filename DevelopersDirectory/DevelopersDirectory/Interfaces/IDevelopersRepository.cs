@@ -11,6 +11,8 @@ namespace DevelopersDirectory.Interfaces
         Task<Developer> SingleDeveloper(int? id);
 
         Task CreateDeveloperEntry(DeveloperDirectoryBindingModel model);
+
+        Task EditDeveloperEntry(int? id, DeveloperDirectoryBindingModel model);
         Task DeleteDeveloper(int? id);
     }
 }
