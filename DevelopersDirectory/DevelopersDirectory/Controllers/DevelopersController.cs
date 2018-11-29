@@ -10,32 +10,34 @@ using System.Threading.Tasks;
 using System.Web.Http;
 using System.Web.Http.Description;
 using DevelopersDirectory.DAL;
+using DevelopersDirectory.Interfaces;
 using DevelopersDirectory.Models;
 
 namespace DevelopersDirectory.Controllers
 {
+    [RoutePrefix("api/developers")]
     public class DevelopersController : ApiController
     {
-        private DirectoryContext db = new DirectoryContext();
+        private readonly IUnitOfWork _unitOfWork;
 
+        public DevelopersController(IUnitOfWork unitOfWork)
+        {
+            _unitOfWork = unitOfWork;
+        }
+
+        //Get all developers directory etries
+        [HttpGet, ActionName("developerdirectory")]
+        public async Task<IHttpActionResult> Developers()
+        {
+            var developersEntries = await _unitOfWork.DevelopersRepository.ListOfDevelopers();
+            return Ok(developersEntries);
+        }
         //Create Developer
         //Get Specific Developer
         //Update Specific Developer
         //Delete Specific Developer
-        // DELETE: api/Developers/5
+        
        
-        protected override void Dispose(bool disposing)
-        {
-            if (disposing)
-            {
-                db.Dispose();
-            }
-            base.Dispose(disposing);
-        }
-
-        private bool DeveloperExists(int id)
-        {
-            return db.Developers.Count(e => e.DeveloperId == id) > 0;
-        }
+        
     }
 }
