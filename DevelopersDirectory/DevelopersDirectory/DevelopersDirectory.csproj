@@ -211,12 +211,10 @@
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ValuesController.cs" />
     <Compile Include="DAL\DirectoryContext.cs" />
-    <Compile Include="DAL\UnitOfWork.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Interfaces\IDevelopersRepository.cs" />
-    <Compile Include="Interfaces\IUnitOfWork.cs" />
     <Compile Include="MappingProfile\ProfileMapping.cs" />
     <Compile Include="Migrations\201811290147447_InitialMigration.cs" />
     <Compile Include="Migrations\201811290147447_InitialMigration.Designer.cs">

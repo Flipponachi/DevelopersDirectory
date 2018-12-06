@@ -44,17 +44,17 @@ namespace DevelopersDirectory.Repository
         {
             var directory = Mapper.Map<Developer>(model);
             _context.Developers.Add(directory);
-            var saved = await _context.SaveChangesAsync();
+            await _context.SaveChangesAsync();
         }
 
         public async Task EditDeveloperEntry(int? id, DeveloperDirectoryBindingModel model)
         {
             var developer = await _context.Developers.FindAsync(id);
-            var editedDeveloper = Mapper.Map<DeveloperDirectoryBindingModel, Developer>(model, developer);
+            Mapper.Map<DeveloperDirectoryBindingModel, Developer>(model, developer);
             if(developer == null)
                 throw new Exception("Developer entry not found");
             
-            // _context.Entry(editedDeveloper).State = EntityState.Modified;
+           
             await _context.SaveChangesAsync();
             
         }
@@ -62,6 +62,10 @@ namespace DevelopersDirectory.Repository
         public async Task DeleteDeveloper(int? id)
         {
             var directoryEntry = await _context.Developers.FindAsync(id);
+
+            if(directoryEntry == null)
+                throw new Exception("Record not found");
+
             _context.Developers.Remove(directoryEntry);
             await _context.SaveChangesAsync();
         }

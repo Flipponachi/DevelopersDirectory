@@ -14,36 +14,44 @@ using DevelopersDirectory.DAL;
 using DevelopersDirectory.Interfaces;
 using DevelopersDirectory.Models;
 using Elmah;
+using Microsoft.Ajax.Utilities;
 
 namespace DevelopersDirectory.Controllers
 {
     [RoutePrefix("api/developers")]
     public class DevelopersController : ApiController
     {
-        private readonly IUnitOfWork _unitOfWork;
+        private readonly IDevelopersRepository _developersRepository;
 
-        public DevelopersController(IUnitOfWork unitOfWork)
+        public DevelopersController(IDevelopersRepository developersRepository)
         {
-            _unitOfWork = unitOfWork;
+            _developersRepository = developersRepository;
         }
 
         //Get all developers directory etries
         [HttpGet, ActionName("developerdirectory")]
         public IHttpActionResult Developers()
         {
-            var developersEntries = _unitOfWork.DevelopersRepository.ListOfDevelopers();
+            var developersEntries = _developersRepository.ListOfDevelopers();
             return Ok(developersEntries);
         }
 
         //Create Developer
         [HttpPost, ActionName("developerdirectory")]
-        public async Task<IHttpActionResult> Developers(DeveloperDirectoryBindingModel model)
+        public async Task<IHttpActionResult> Developers([FromBody]DeveloperDirectoryBindingModel model)
         {
             if (!ModelState.IsValid)
                 return BadRequest("Invalid Data entry");
 
+            if (model.Name.IsNullOrWhiteSpace())
+                return BadRequest("Specify Name of the Developer");
 
-            await _unitOfWork.DevelopersRepository.CreateDeveloperEntry(model);
+            if (model.CategoryId == 0)
+                return BadRequest("Specify the Category Id");
+
+
+            
+            await _developersRepository.CreateDeveloperEntry(model);
             try
             {
                 return StatusCode(HttpStatusCode.Created);
@@ -65,7 +73,7 @@ namespace DevelopersDirectory.Controllers
             try
             {
 
-                var developerEntry = await _unitOfWork.DevelopersRepository.SingleDeveloper(id);
+                var developerEntry = await _developersRepository.SingleDeveloper(id);
                 return Ok(developerEntry);
             }
             catch (Exception e)
@@ -85,7 +93,7 @@ namespace DevelopersDirectory.Controllers
             
             try
             {
-                await _unitOfWork.DevelopersRepository.EditDeveloperEntry(id, model);
+                await _developersRepository.EditDeveloperEntry(id, model);
                 return Ok("Updated Successfully");
             }
             catch (Exception e)
@@ -104,7 +112,7 @@ namespace DevelopersDirectory.Controllers
 
             try
             {
-                await _unitOfWork.DevelopersRepository.DeleteDeveloper(id);
+                await _developersRepository.DeleteDeveloper(id);
                 return Ok("Record Deleted Successfully");
             }
             catch (Exception e)
@@ -118,7 +126,7 @@ namespace DevelopersDirectory.Controllers
         [HttpGet, ActionName("category")]
         public async Task<IHttpActionResult> Category()
         {
-            var category = await _unitOfWork.DevelopersRepository.DeveloperCategories();
+            var category = await _developersRepository.DeveloperCategories();
             return Ok(category);
 
         }
@@ -130,7 +138,7 @@ namespace DevelopersDirectory.Controllers
                 return BadRequest("Supply Id Of the Category");
 
 
-            var category = await _unitOfWork.DevelopersRepository.DeveloperCategories(id);
+            var category = await _developersRepository.DeveloperCategories(id);
             return Ok(category);
 
         }
@@ -140,7 +148,7 @@ namespace DevelopersDirectory.Controllers
         {
             try
             {
-                var category = await _unitOfWork.DevelopersRepository.DeveloperCategories(categoryName);
+                var category = await _developersRepository.DeveloperCategories(categoryName);
                 return Ok(category);
             }
             catch (Exception e)
