@@ -43,6 +43,12 @@ namespace DevelopersDirectory.Repository
         public async Task CreateDeveloperEntry(DeveloperDirectoryBindingModel model)
         {
             var directory = Mapper.Map<Developer>(model);
+
+            var category = await _context.Categories.FindAsync(model.CategoryId);
+
+            if(category == null)
+                throw new Exception("Category Doesn't exist");
+
             _context.Developers.Add(directory);
             await _context.SaveChangesAsync();
         }

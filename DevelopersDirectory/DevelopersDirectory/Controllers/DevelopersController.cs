@@ -46,7 +46,7 @@ namespace DevelopersDirectory.Controllers
             if (model.Name.IsNullOrWhiteSpace())
                 return BadRequest("Specify Name of the Developer");
 
-            if (model.CategoryId == 0)
+            if (model.CategoryId <= 0)
                 return BadRequest("Specify the Category Id");
 
 
@@ -59,7 +59,7 @@ namespace DevelopersDirectory.Controllers
             catch (Exception e)
             {
                 ErrorSignal.FromCurrentContext().Raise(e);
-                return StatusCode(HttpStatusCode.InternalServerError);
+                return BadRequest($"{e.Message} " + HttpStatusCode.InternalServerError);
             }
         }
 
