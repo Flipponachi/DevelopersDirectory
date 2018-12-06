@@ -46,12 +46,12 @@ namespace DevelopersDirectory.Controllers
             await _unitOfWork.DevelopersRepository.CreateDeveloperEntry(model);
             try
             {
-               return Ok("Developer entry created successfully");
+                return StatusCode(HttpStatusCode.Created);
             }
             catch (Exception e)
             {
                 ErrorSignal.FromCurrentContext().Raise(e);
-                return BadRequest($"Developer entry not created. {e.Message}");
+                return StatusCode(HttpStatusCode.InternalServerError);
             }
         }
 
@@ -71,26 +71,26 @@ namespace DevelopersDirectory.Controllers
             catch (Exception e)
             {
                 ErrorSignal.FromCurrentContext().Raise(e);
-                return BadRequest($"Developer Record not found");
+                return NotFound();
             }
         }
 
 
         //Update Specific Developer
         [HttpPut, ActionName("developerdirectory")]
-        public async Task<IHttpActionResult> UpdateDeveloper([FromBody]Developer model)
+        public async Task<IHttpActionResult> UpdateDeveloper(int? id, [FromBody]DeveloperDirectoryBindingModel model)
         {
-            if (model.DeveloperId.Equals(null))
+            if (id == null)
                 return BadRequest("Supply Id Of developer");
             
             try
             {
-                await _unitOfWork.DevelopersRepository.EditDeveloperEntry(model);
-                return Ok("Record Updated successfully");
+                await _unitOfWork.DevelopersRepository.EditDeveloperEntry(id, model);
+                return Ok("Updated Successfully");
             }
             catch (Exception e)
             {
-                return BadRequest(e.Message);
+                return StatusCode(HttpStatusCode.InternalServerError);
             }
 
         }
@@ -120,6 +120,34 @@ namespace DevelopersDirectory.Controllers
         {
             var category = await _unitOfWork.DevelopersRepository.DeveloperCategories();
             return Ok(category);
+
+        }
+
+        [HttpGet, ActionName("category")]
+        public async Task<IHttpActionResult> Category(int? id)
+        {
+            if (id == null)
+                return BadRequest("Supply Id Of the Category");
+
+
+            var category = await _unitOfWork.DevelopersRepository.DeveloperCategories(id);
+            return Ok(category);
+
+        }
+
+        [HttpGet, ActionName("category")]
+        public async Task<IHttpActionResult> Category(string categoryName)
+        {
+            try
+            {
+                var category = await _unitOfWork.DevelopersRepository.DeveloperCategories(categoryName);
+                return Ok(category);
+            }
+            catch (Exception e)
+            {
+                ErrorSignal.FromCurrentContext().Raise(e);
+                return NotFound();
+            }
 
         }
 

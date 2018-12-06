@@ -8,12 +8,14 @@ namespace DevelopersDirectory.Interfaces
     public interface IDevelopersRepository
     {
         Task<IQueryable<Developer>> ListOfDevelopers();
-        Task<Developer> SingleDeveloper(int? id);
+        Task<DeveloperDirectoryBindingModel> SingleDeveloper(int? id);
 
         Task CreateDeveloperEntry(DeveloperDirectoryBindingModel model);
 
-        Task EditDeveloperEntry(Developer model);
+        Task EditDeveloperEntry(int? id, DeveloperDirectoryBindingModel model);
         Task DeleteDeveloper(int? id);
         Task<IQueryable<Category>> DeveloperCategories();
+        Task<Category> DeveloperCategories(int? id);
+        Task<Category> DeveloperCategories(string categoryName);
     }
 }

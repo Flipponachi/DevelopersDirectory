@@ -15,7 +15,8 @@ namespace DevelopersDirectory.MappingProfile
             Mapper.Initialize(cfg =>
             {
                 cfg.CreateMap<Developer, DeveloperDirectoryBindingModel>().ReverseMap();
-               
+                cfg.CreateMap<IQueryable<Developer>, IQueryable<DeveloperDirectoryBindingModel>>();
+                cfg.CreateMap<DeveloperDirectoryBindingModel, Developer>().ForMember(v => v.DeveloperId, opt => opt.Ignore());
             });
         }
     }

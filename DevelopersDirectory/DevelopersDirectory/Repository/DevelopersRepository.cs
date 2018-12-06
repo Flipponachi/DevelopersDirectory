@@ -24,16 +24,18 @@ namespace DevelopersDirectory.Repository
         {
             var entries = await _context.Developers.ToListAsync();
             return entries.AsQueryable();
+          
         }
 
         //Get a single Entry details
-        public async Task<Developer> SingleDeveloper(int? id)
+        public async Task<DeveloperDirectoryBindingModel> SingleDeveloper(int? id)
         {
             var entry = await _context.Developers.FirstOrDefaultAsync(e => e.DeveloperId == id);
+            var dto = Mapper.Map<DeveloperDirectoryBindingModel>(entry);
             if(entry == null)
                 throw new Exception("No Record Found");
 
-            return entry;
+            return dto;
         }
 
         public async Task CreateDeveloperEntry(DeveloperDirectoryBindingModel model)
@@ -43,22 +45,21 @@ namespace DevelopersDirectory.Repository
             var saved = await _context.SaveChangesAsync();
         }
 
-        public async Task EditDeveloperEntry(Developer model)
+        public async Task EditDeveloperEntry(int? id, DeveloperDirectoryBindingModel model)
         {
-            var developer = await _context.Developers.FindAsync(model.DeveloperId);
-
+            var developer = await _context.Developers.FindAsync(id);
+            var editedDeveloper = Mapper.Map<DeveloperDirectoryBindingModel, Developer>(model, developer);
             if(developer == null)
                 throw new Exception("Developer entry not found");
-
-            //_context.Developers.Add(developer);
-             _context.Entry(developer).State = EntityState.Modified;
+            
+            // _context.Entry(editedDeveloper).State = EntityState.Modified;
             await _context.SaveChangesAsync();
             
         }
 
         public async Task DeleteDeveloper(int? id)
         {
-            var directoryEntry = await SingleDeveloper(id);
+            var directoryEntry = await _context.Developers.FindAsync(id);
             _context.Developers.Remove(directoryEntry);
             await _context.SaveChangesAsync();
         }
@@ -68,6 +69,24 @@ namespace DevelopersDirectory.Repository
         {
             var categories = await _context.Categories.Include(e => e.Developers).ToListAsync();
             return categories.AsQueryable();
+        }
+
+        public async Task<Category> DeveloperCategories(int? id)
+        {
+            var category = await _context.Categories
+                .Include(e => e.Developers)
+                .FirstAsync(e => e.CategoryId == id);
+
+            return category;
+        }
+
+        public async Task<Category> DeveloperCategories(string categoryName)
+        {
+            var category = await _context.Categories
+                .Include(e => e.Developers)
+                .FirstAsync(e => e.CategoryTitle == categoryName);
+
+            return category;
         }
     }
 }
