@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using DevelopersDirectory.BindingModels;
 using DevelopersDirectory.Models;
@@ -7,7 +8,7 @@ namespace DevelopersDirectory.Interfaces
 {
     public interface IDevelopersRepository
     {
-        Task<IQueryable<Developer>> ListOfDevelopers();
+        List<DeveloperDirectoryBindingModel> ListOfDevelopers();
         Task<DeveloperDirectoryBindingModel> SingleDeveloper(int? id);
 
         Task CreateDeveloperEntry(DeveloperDirectoryBindingModel model);

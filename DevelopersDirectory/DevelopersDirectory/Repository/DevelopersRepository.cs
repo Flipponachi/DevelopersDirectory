@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
 using System.Threading.Tasks;
@@ -19,12 +20,13 @@ namespace DevelopersDirectory.Repository
             _context = new DirectoryContext();
         }
 
-        //Get all directory enty
-        public async Task<IQueryable<Developer>> ListOfDevelopers()
+        //Get all directory entry
+        public List<DeveloperDirectoryBindingModel> ListOfDevelopers()
         {
-            var entries = await _context.Developers.ToListAsync();
-            return entries.AsQueryable();
-          
+            var entries = _context.Developers.ToList();
+           
+            var dto = Mapper.Map<List<DeveloperDirectoryBindingModel>>(entries);
+            return dto;
         }
 
         //Get a single Entry details
@@ -88,5 +90,7 @@ namespace DevelopersDirectory.Repository
 
             return category;
         }
+
+        
     }
 }

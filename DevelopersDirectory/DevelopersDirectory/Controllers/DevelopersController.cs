@@ -29,9 +29,9 @@ namespace DevelopersDirectory.Controllers
 
         //Get all developers directory etries
         [HttpGet, ActionName("developerdirectory")]
-        public async Task<IHttpActionResult> Developers()
+        public IHttpActionResult Developers()
         {
-            var developersEntries = await _unitOfWork.DevelopersRepository.ListOfDevelopers();
+            var developersEntries = _unitOfWork.DevelopersRepository.ListOfDevelopers();
             return Ok(developersEntries);
         }
 
