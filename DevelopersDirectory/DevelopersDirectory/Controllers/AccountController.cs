@@ -10,6 +10,7 @@ using System.Web;
 using System.Web.Http;
 using DevelopersDirectory.App_Start;
 using DevelopersDirectory.BindingModels;
+using DevelopersDirectory.DAL;
 using DevelopersDirectory.Models;
 using DevelopersDirectory.Providers;
 using Microsoft.AspNet.Identity;
@@ -70,9 +71,13 @@ namespace DevelopersDirectory.Controllers
 
             var user = new ApplicationUser() { UserName = model.EmailAddress, Email = model.EmailAddress, FullName = model.Name };
 
+            var _context = new ApplicationDbContext();
+            var _userStore = new UserStore<ApplicationUser>(_context);
+            var _userManager = new UserManager<ApplicationUser>(_userStore);
+
             try
             {
-                IdentityResult result = await UserManager.CreateAsync(user, model.Password);
+                IdentityResult result = await _userManager.CreateAsync(user, model.Password);
 
                 if (!result.Succeeded)
                 {
@@ -85,7 +90,7 @@ namespace DevelopersDirectory.Controllers
                 throw;
             }
 
-            return Ok("Account created Successfully. Login below to complete registration");
+            return Ok();
         }
 
         
@@ -100,6 +105,7 @@ namespace DevelopersDirectory.Controllers
             base.Dispose(disposing);
         }
 
+       
         #region Helpers
 
         private IAuthenticationManager Authentication
