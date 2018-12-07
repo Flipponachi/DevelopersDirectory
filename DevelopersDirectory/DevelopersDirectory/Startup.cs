@@ -2,9 +2,13 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
+using Microsoft.Owin;
+
+[assembly: OwinStartup(typeof(DevelopersDirectory.Startup))]
 
 namespace DevelopersDirectory
 {
+    using App_Start;
     using System.Reflection;
     using System.Web.Http;
     using Ninject;
@@ -12,11 +16,7 @@ namespace DevelopersDirectory
     using Ninject.Web.WebApi.OwinHost;
 
     using Owin;
-
-    /// <summary>
-    /// The startup class for a OWIN service.
-    /// </summary>
-    public class Startup
+    public partial class Startup
     {
         /// <summary>
         /// Creates a configuration.
@@ -26,6 +26,8 @@ namespace DevelopersDirectory
         /// </param>
         public void Configuration(IAppBuilder app)
         {
+            ConfigureAuth(app);
+
             var webApiConfiguration = new HttpConfiguration();
             webApiConfiguration.Routes.MapHttpRoute(
                 name: "DefaultApi",
