@@ -129,6 +129,24 @@ namespace DevelopersDirectoryTest
             Assert.That(result.Content, Is.TypeOf<DeveloperDirectoryBindingModel>());
         }
 
-       
+        [Test]
+        public async Task DeleteDeveloper_SupplyNoValueForDeveloperId_ReturnsBadRequestWithMessage()
+        {
+            
+            var result = await _controller.DeleteDeveloper(null) as BadRequestErrorMessageResult;
+
+            Assert.IsNotNull(result);
+            Assert.AreEqual("Supply Id of developer", result.Message);
+        }
+
+        [Test]
+        public async Task DeleteDeveloper_SupplyNoValueForDeveloperId_ThrowsException()
+        {
+            _developersRepoMock.Setup(e => e.DeleteDeveloper(null)).Throws<NullReferenceException>();
+            var result = await _controller.DeleteDeveloper(null) as BadRequestErrorMessageResult;
+            
+           Assert.IsNotNull(result);
+        }
+
     }
 }

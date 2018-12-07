@@ -18,10 +18,12 @@ using Microsoft.Ajax.Utilities;
 
 namespace DevelopersDirectory.Controllers
 {
+   
     [RoutePrefix("api/developers")]
     public class DevelopersController : ApiController
     {
         private readonly IDevelopersRepository _developersRepository;
+
 
         public DevelopersController(IDevelopersRepository developersRepository)
         {
@@ -29,6 +31,7 @@ namespace DevelopersDirectory.Controllers
         }
 
         //Get all developers directory etries
+        
         [HttpGet, ActionName("developerdirectory")]
         public IHttpActionResult Developers()
         {
@@ -36,7 +39,9 @@ namespace DevelopersDirectory.Controllers
             return Ok(developersEntries);
         }
 
+
         //Create Developer
+        
         [HttpPost, ActionName("developerdirectory")]
         public async Task<IHttpActionResult> Developers([FromBody]DeveloperDirectoryBindingModel model)
         {
@@ -64,6 +69,7 @@ namespace DevelopersDirectory.Controllers
         }
 
         //Get Specific Developer
+        [Authorize]
         [HttpGet, Route("singleentry")]
         public async Task<IHttpActionResult> SingleEntry(int? id)
         {
@@ -108,7 +114,7 @@ namespace DevelopersDirectory.Controllers
         public async Task<IHttpActionResult> DeleteDeveloper(int? id)
         {
             if (id == null)
-                return BadRequest("Supply Id of developer deleted");
+                return BadRequest("Supply Id of developer");
 
             try
             {

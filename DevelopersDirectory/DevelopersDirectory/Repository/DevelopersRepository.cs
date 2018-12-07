@@ -70,7 +70,7 @@ namespace DevelopersDirectory.Repository
             var directoryEntry = await _context.Developers.FindAsync(id);
 
             if(directoryEntry == null)
-                throw new Exception("Record not found");
+                throw new NullReferenceException();
 
             _context.Developers.Remove(directoryEntry);
             await _context.SaveChangesAsync();
